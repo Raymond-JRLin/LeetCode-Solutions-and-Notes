@@ -51,7 +51,7 @@ class Solution {
     }
 
     private List<Integer> method3(TreeNode root) {
-        // BitTiger Qinyuan, I modified with staack
+        // BitTiger Qinyuan, I modified with stack
         List<Integer> result = new ArrayList<>();
         Stack<Guide> stack = new Stack<>();
         stack.push(new Guide(0, root));
