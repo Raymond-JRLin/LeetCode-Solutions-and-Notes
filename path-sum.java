@@ -33,14 +33,26 @@ class Solution {
             return false;
         }
 
-        return mytry(root, sum);
+        // return mytry(root, sum);
+
+        return method2(root, sum);
+    }
+
+    private boolean method2(TreeNode root, int sum) {
+        if (root == null) {
+            return false;
+        }
+        if (root.left == null && root.right == null) {
+            return root.val == sum;
+        }
+        return method2(root.left, sum - root.val) || method2(root.right, sum - root.val);
     }
 
     private boolean mytry(TreeNode root, int sum) {
         return dfs(root, sum, 0);
     }
     private boolean dfs(TreeNode root, int sum, int curr) {
-        curr += root.val;
+        curr += root.val; // 现在感觉这里不太好， 其实是不会等于 null 的， 因为在上一层的最后的 if 中过滤掉了， 但还是觉得怪怪的LOL
         if (root.left == null && root.right == null) {
             if (curr == sum) {
                 return true;

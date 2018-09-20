@@ -38,7 +38,33 @@ class Solution {
             return Collections.emptyList();
         }
 
-        return mytry(root, sum);
+        // return mytry(root, sum);
+
+        return method2(root, sum);
+    }
+
+    private List<List<Integer>> method2(TreeNode root, int sum) {
+        List<List<Integer>> result = new ArrayList<>();
+        recursion(root, sum, result, new ArrayList<>());
+        return result;
+    }
+    private void recursion(TreeNode root, int sum, List<List<Integer>> result, List<Integer> list) {
+        list.add(root.val);
+        if (root.left == null && root.right == null) {
+            if (root.val == sum) {
+                result.add(new ArrayList<>(list));
+            }
+            return;
+        }
+
+        if (root.left != null) {
+            recursion(root.left, sum - root.val, result, list);
+            list.remove(list.size() - 1);
+        }
+        if (root.right != null) {
+            recursion(root.right, sum - root.val, result, list);
+            list.remove(list.size() - 1);
+        }
     }
 
     private List<List<Integer>> mytry(TreeNode root, int sum) {
@@ -49,13 +75,17 @@ class Solution {
     private void dfs(TreeNode root, int target, List<List<Integer>> result, List<Integer> list, int sum) {
         list.add(root.val);
         int curr = sum + root.val;
-        // cannot return here if sum is already larger than target, since there're positive and negatives
+        // System.out.println("now check " + root.val);
+
         if (root.left == null && root.right == null) {
+            // System.out.println("get leaf and sum is " + curr);
             if (curr == target) {
+                // System.out.println("find one ");
                 result.add(new ArrayList<>(list));
             }
             return;
         }
+
 
         if (root.left != null) {
             dfs(root.left, target, result, list, curr);
