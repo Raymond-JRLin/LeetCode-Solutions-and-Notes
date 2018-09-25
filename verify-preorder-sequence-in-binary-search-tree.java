@@ -86,7 +86,7 @@ class Solution {
         Stack<Integer> stack = new Stack<>();
         for (int num : preorder) {
             if (num < low) {
-                // 在更后面的位置反而有一个更大的数
+                // 在更后面的位置反而有一个更小的数
                 return false;
             }
             while (!stack.isEmpty() && num > stack.peek()) {
