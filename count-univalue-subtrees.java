@@ -39,6 +39,7 @@ class Solution {
 
     private int method2(TreeNode root) {
         // mytry 的问题在于重复计算， 每次到了 subtree 都会去查整棵 subtree 是否是 uni-value 的， 想要只计算一次， 那么要采用 post order， 即从下面开始， 先看 left child and right child 是否一样， 一样的话才有可能是 uni-value 的树， 然后才需要继续往上查； 因为如果下面的都不一样了， 上面的 subtree 肯定不是 uni-value 的
+        // update： 我觉得其实也就是 recursion 吧， 这样有返回值的就不用每次去查了， 在 backtracking 的过程中就可以知道左右子树是不是 univalue
         result = 0;
         postorder(root);
         return result;
