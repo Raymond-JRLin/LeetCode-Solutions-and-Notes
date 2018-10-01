@@ -61,9 +61,9 @@ class Solution {
 
         // mytry(root);
 
-        // method2(root);
+        method2(root);
 
-        method3(root);
+        // method3(root);
     }
 
     private void method3(TreeNode root) {
@@ -138,11 +138,11 @@ class Solution {
         }
         traverse(root.left);
 
-        if (first == null && prev.val > root.val) {
+        if (first == null && prev.val >= root.val) {
             // System.out.println("first is null and prev-" + prev.val + " is larger than root-" + root.val);
             first = prev;
         }
-        if (first != null && prev.val > root.val) {
+        if (first != null && prev.val >= root.val) {
             // System.out.println("first is not null and prev-" + prev.val + " is larger than root-" + root.val);
             second = root;
         }

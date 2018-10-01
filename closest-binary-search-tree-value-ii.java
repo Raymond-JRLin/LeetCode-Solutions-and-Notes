@@ -41,7 +41,44 @@ class Solution {
         // return method1(root, target, k);
 
         // improved method1
-        return method2(root, target, k);
+        // return method2(root, target, k);
+
+        return method3(root, target, k);
+    }
+
+    private List<Integer> method3(TreeNode root, double target, int k) {
+        // O(N + k) time
+        // 1. track predecessors and successors
+        Stack<Integer> pre = new Stack<>();
+        Stack<Integer> suc = new Stack<>();
+        recursion(root, target, pre, true);
+        recursion(root, target, suc, false);
+        // 2. like merge sort, we compare and pick the closest one to the target and put it to the result list.
+        List<Integer> result = new ArrayList<>();
+        while (k > 0) {
+            if (pre.isEmpty()) {
+                result.add(suc.pop());
+            } else if (suc.isEmpty()) {
+                result.add(pre.pop());
+            } else if (Math.abs(pre.peek() - target) < Math.abs(suc.peek() - target)) {
+                result.add(pre.pop());
+            } else {
+                result.add(suc.pop());
+            }
+            k--;
+        }
+        return result;
+    }
+    private void recursion(TreeNode root, double target, Stack<Integer> stack, boolean isReverse) {
+        // isReverse to control predeccessor or successor
+        if (root == null) {
+            return;
+        }
+        recursion(isReverse ? root.right : root.left, target, stack, isReverse);
+        if (isReverse && root.val >= target || !isReverse && root.val < target) {
+            stack.push(root.val);
+        }
+        recursion(isReverse ? root.left : root.right, target, stack, isReverse);
     }
 
     private List<Integer> method2(TreeNode root, double target, int k) {
