@@ -62,7 +62,7 @@ class Solution {
         }
         int[] result = new int[n];
         for (int i = 0; i < n; i++) {
-            result[i] = stack.pop();
+            result[i] = stack.pop(); // recursion 走到最底层才放入 stack， 倒过来 pop 就正好了
         }
         return result;
     }
