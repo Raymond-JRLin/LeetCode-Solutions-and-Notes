@@ -56,7 +56,8 @@ class Solution {
     }
 
     private List<String> method1(String[][] tickets) {
-        // DFS
+        // Eulerian path, Greedy DFS
+        // 由于题目要求解法按字母顺序小的，那么我们考虑用multiset，可以自动排序。等我们图建立好了以后，从节点JFK开始遍历，只要当前节点映射的multiset里有节点，我们取出这个节点，将其在multiset里删掉，然后继续递归遍历这个节点，由于题目中限定了一定会有解，那么等图中所有的multiset中都没有节点的时候，我们把当前节点存入结果中，然后再一层层回溯回去，将当前节点都存入结果，那么最后我们结果中存的顺序和我们需要的相反的，我们最后再翻转一下即可，
         Map<String, PriorityQueue<String>> map = new HashMap<>(); // <from, tos>
         for (String[] ticket : tickets) {
             PriorityQueue<String> pq = map.getOrDefault(ticket[0], new PriorityQueue<>());
