@@ -17,7 +17,6 @@
 // ]
 
 
-
 /**
  * Definition for a binary tree node.
  * public class TreeNode {
@@ -33,7 +32,26 @@ class Solution {
             return new ArrayList<List<Integer>>();
         }
 
-        return mytry(root);
+        // return mytry(root);
+
+        return method2(root);
+    }
+
+    private List<List<Integer>> method2(TreeNode root) {
+        List<List<Integer>> result = new ArrayList<>();
+        recursion(root, result, 0);
+        return result;
+    }
+    private void recursion(TreeNode root, List<List<Integer>> result, int level) {
+        if (root == null) {
+            return;
+        }
+        if (result.size() <= level) {
+            result.add(new ArrayList<>());
+        }
+        result.get(level).add(root.val);
+        recursion(root.left, result, level + 1);
+        recursion(root.right, result, level + 1);
     }
 
     private List<List<Integer>> mytry(TreeNode root) {
