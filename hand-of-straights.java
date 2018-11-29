@@ -35,12 +35,39 @@ class Solution {
 
         // return mytry(hand, W);
 
-        return method2(hand, W);
+        // return method2(hand, W);
+
+        return method3(hand, W);
+    }
+
+    private boolean method3(int[] nums, int w) {
+        // ref: https://leetcode.com/problems/hand-of-straights/discuss/135598/C++JavaPython-O(MlogM)-Complexity
+        Map<Integer, Integer> map = new TreeMap<>();
+        for (int num : nums) {
+            map.put(num, map.getOrDefault(num, 0) + 1);
+        }
+        Queue<Integer> queue = new LinkedList<>();
+        int group = 0;
+        int prev = -1;
+        for (int key : map.keySet()) {
+            if (group > 0 && key > prev + 1 || group > map.get(key)) {
+                return false;
+            }
+            queue.offer(map.get(key) - group);
+            prev = key;
+            group = map.get(key);
+            if (queue.size() == w) {
+                group -= queue.poll();
+            }
+        }
+        return group == 0;
     }
 
     private boolean method2(int[] nums, int w) {
         // 利用 TreeMap 就可以实现内部排列好的顺序， 每次从最小的开始走 w 个
         // 还有个小 trick 就是可以不用每次 - 1， 而是减去当前最小的数的个数， 因为如果符合题目要求的话， 就会刚好用完， 否则后面会出现负的， 那就返回 false
+        // O(MlogM + MW), where M is the number of different cards.
+        // ref: https://leetcode.com/problems/hand-of-straights/discuss/135598/C++JavaPython-O(MlogM)-Complexity
         Map<Integer, Integer> map = new TreeMap<>();
         for (int num : nums) {
             map.put(num, map.getOrDefault(num, 0) + 1);
@@ -52,7 +79,7 @@ class Solution {
                     if (map.getOrDefault(key + i, 0) < map.get(key)) {
                         return false;
                     }
-                    map.put(key + i, map.get(key + i) - map.get(key));
+                    map.put(key + i, map.get(key + i) - map.get(key)); // 直接减掉当前 key 有的个数， 因为如果还在 w 个范围内， 始终是要用尽的
                 }
             }
         }
