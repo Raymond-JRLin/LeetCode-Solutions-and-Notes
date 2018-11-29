@@ -33,7 +33,30 @@ class Solution {
             return false;
         }
 
-        return mytry(hand, W);
+        // return mytry(hand, W);
+
+        return method2(hand, W);
+    }
+
+    private boolean method2(int[] nums, int w) {
+        // 利用 TreeMap 就可以实现内部排列好的顺序， 每次从最小的开始走 w 个
+        // 还有个小 trick 就是可以不用每次 - 1， 而是减去当前最小的数的个数， 因为如果符合题目要求的话， 就会刚好用完， 否则后面会出现负的， 那就返回 false
+        Map<Integer, Integer> map = new TreeMap<>();
+        for (int num : nums) {
+            map.put(num, map.getOrDefault(num, 0) + 1);
+        }
+        for (int key : map.keySet()) {
+            if (map.get(key) > 0) {
+                for (int i = w - 1; i >= 0; i--) {
+                    // 注意这里要从后往前更新， 因为下面要更新 i 之后 w 个数， 减去的是 key 的个数， 所以要最后来更新它
+                    if (map.getOrDefault(key + i, 0) < map.get(key)) {
+                        return false;
+                    }
+                    map.put(key + i, map.get(key + i) - map.get(key));
+                }
+            }
+        }
+        return true;
     }
 
     private boolean mytry(int[] nums, int w) {
