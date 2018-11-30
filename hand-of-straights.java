@@ -42,21 +42,25 @@ class Solution {
 
     private boolean method3(int[] nums, int w) {
         // ref: https://leetcode.com/problems/hand-of-straights/discuss/135598/C++JavaPython-O(MlogM)-Complexity
+        // O(MlogM), where M is the number of different cards.
         Map<Integer, Integer> map = new TreeMap<>();
         for (int num : nums) {
             map.put(num, map.getOrDefault(num, 0) + 1);
         }
         Queue<Integer> queue = new LinkedList<>();
-        int group = 0;
-        int prev = -1;
+        int group = 0; // 当前存在的 group
+        int prev = -1; // 前一个数， 从小到大
         for (int key : map.keySet()) {
             if (group > 0 && key > prev + 1 || group > map.get(key)) {
+                // 如果已经存在一些 group， 当前取出的数并接不上前一个
+                // 或者 group 比当前数的个数多， 即不够用
                 return false;
             }
-            queue.offer(map.get(key) - group);
+            queue.offer(map.get(key) - group); // 记录新开的 group
             prev = key;
-            group = map.get(key);
+            group = map.get(key); // 当前一共有多少 group
             if (queue.size() == w) {
+                // 存够了 w 个， 减去这个 group 第一个数开的 group
                 group -= queue.poll();
             }
         }
