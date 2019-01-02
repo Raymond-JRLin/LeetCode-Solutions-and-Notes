@@ -41,7 +41,7 @@ class Solution {
     }
 
     private int[] method2(int n, int k) {
-        // 其是可以不需要用 char 来， 直接用 int， % 可以得到最后一位数
+        // 其实可以不需要用 char 来， 直接用 int， % 可以得到最后一位数
         List<Integer> curr = Arrays.asList(0, 1, 2, 3, 4, 5, 6, 7, 8, 9);
         for (int i = 1; i < n; i++) {
             List<Integer> next = new ArrayList<>();
