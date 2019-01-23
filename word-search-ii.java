@@ -30,6 +30,10 @@ class Solution {
     }
 
     private List<String> method1(char[][] board, String[] words) {
+        // 这里对 Trie 有所改动， 使得更快， 主要有：
+        // 1. 在每个 word 结束的 node 中不是记录是否是 word， 而是记录这个 word， 因此也就不需要 StringBuilder 来在 DFS 过程中加 char， 直接看走到的这个 node 是否有 word string
+        // 2. 不用 visited 数组， 直接改动原数组
+        // 3. 加完一个 word 之后， 把它抹掉， 为了去重
         TrieNode root = buildTrie(words);
         List<String> result = new ArrayList<>();
         for (int i = 0; i < board.length; i++) {
