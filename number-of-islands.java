@@ -32,7 +32,74 @@ class Solution {
         // return mytry(grid);
 
         // DFS
-        return method2(grid);
+        // return method2(grid);
+
+        // Union Find
+        return method3(grid);
+    }
+
+    private int method3(char[][] grid) {
+        // Union Find
+        int n = grid.length;
+        int m = grid[0].length;
+        UnionFind uf = new UnionFind(grid);
+        // Union Find 是不需要 visited 记录的， 因为如果是 connected 的话， 在 check a 和 b 的时候就会有相同的总结点
+        int[] dx = {0, 0, 1, -1};
+        int[] dy = {1, -1, 0, 0};
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < m; j++) {
+                if (grid[i][j] == '1') {
+                    for (int k = 0; k < 4; k++) {
+                        int x = i + dx[k];
+                        int y = j + dy[k];
+                        if (x < 0 || x >= n || y < 0 || y >= m) {
+                            continue;
+                        }
+                        if (grid[x][y] != '1') {
+                            continue;
+                        }
+                        uf.connect(i * m + j, x * m + y);
+                    }
+                }
+            }
+        }
+        return uf.count;
+    }
+    private class UnionFind {
+        private int nums[];
+        private int count;
+        public UnionFind(char[][] grid) {
+            int n = grid.length;
+            int m = grid[0].length;
+            nums = new int[n * m];
+            Arrays.fill(nums, -1);
+            count = 0;
+            for (int i = 0; i < n; i++) {
+                for (int j = 0; j < m; j++) {
+                    if (grid[i][j] == '1') {
+                        nums[i * m + j] = i * m + j;
+                        count++;
+                    }
+                }
+            }
+        }
+        public int find(int i) {
+            while (i != nums[i]) {
+                nums[i] = nums[nums[i]];
+                i = nums[i];
+            }
+            return i;
+        }
+        public boolean connect(int a, int b) {
+            int rootA = find(a);
+            int rootB = find(b);
+            if (rootA != rootB) {
+                nums[rootB] = rootA;
+                count--;
+                return true;
+            }
+            return false;
+        }
     }
 
     private int method2(char[][] grid) {
