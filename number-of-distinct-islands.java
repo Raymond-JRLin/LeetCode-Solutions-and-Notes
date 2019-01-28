@@ -62,10 +62,10 @@ class Solution {
         }
         sb.append(mark);
         visited[i][j] = true;
-        dfs(grid, i, j + 1, 'u', sb, visited);
-        dfs(grid, i, j - 1, 'd', sb, visited);
-        dfs(grid, i + 1, j, 'r', sb, visited);
-        dfs(grid, i - 1, j, 'l', sb, visited);
+        dfs(grid, i, j + 1, 'r', sb, visited);
+        dfs(grid, i, j - 1, 'l', sb, visited);
+        dfs(grid, i + 1, j, 'd', sb, visited);
+        dfs(grid, i - 1, j, 'u', sb, visited);
         sb.append('#');
     }
 }

@@ -38,6 +38,7 @@ class Solution {
         for (int i = 0; i < n; i++) {
             int digit = digits.charAt(i) - '0';
             while (queue.peek().length() == i) {
+                // 注意这个 while 终止条件， 在一个个 poll 出来的同时加一个 char 然后又 offer 回去， 所以 isEmpty() 不能用
                 String output = queue.poll();
                 for (char c : mapping[digit].toCharArray()) {
                     queue.offer(output + c);
