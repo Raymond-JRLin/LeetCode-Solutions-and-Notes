@@ -54,37 +54,81 @@
 
 // method 2: use 1 stack and 1 variable to record current min
 // ref: https://leetcode.com/problems/min-stack/discuss/49014/
+// class MinStack {
+
+//     Stack<Integer> stack; // record each value as push order
+//     int min; // recode only min value for each pushing
+
+//     /** initialize your data structure here. */
+//     public MinStack() {
+//         stack = new Stack<Integer>();
+//         min = Integer.MAX_VALUE;
+//     }
+
+//     public void push(int x) {
+//         if (x <= min) {
+//             stack.push(min);
+//             min = x;
+//         }
+//         stack.push(x);
+//     }
+
+//     public void pop() {
+//         if (stack.pop() == min) {
+//             min = stack.pop();
+//         }
+//     }
+
+//     public int top() {
+//         return stack.peek();
+//     }
+
+//     public int getMin() {
+//         return min;
+//     }
+// }
+
+// method 3
 class MinStack {
 
-    Stack<Integer> stack; // record each value as push order
-    int min; // recode only min value for each pushing
+    public Node head;
 
     /** initialize your data structure here. */
     public MinStack() {
-        stack = new Stack<Integer>();
-        min = Integer.MAX_VALUE;
+        head = null;
     }
 
     public void push(int x) {
-        if (x <= min) {
-            stack.push(min);
-            min = x;
+        if (head == null) {
+            head = new Node(x, x, null);
+        } else {
+            head = new Node(x, Math.min(x, head.min), head);
         }
-        stack.push(x);
     }
 
     public void pop() {
-        if (stack.pop() == min) {
-            min = stack.pop();
+        if (head == null) {
+            return;
         }
+        head = head.next;
     }
 
     public int top() {
-        return stack.peek();
+        return head.val;
     }
 
     public int getMin() {
-        return min;
+        return head.min;
+    }
+}
+class Node {
+    public int val;
+    public Node next;
+    public int min;
+    public Node(int val, int min, Node next) {
+        this.val = val;
+        this.min = min;
+        this.next = next;
     }
 }
 
