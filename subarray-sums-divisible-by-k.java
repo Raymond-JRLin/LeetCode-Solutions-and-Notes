@@ -21,6 +21,8 @@
 // 1 <= A.length <= 30000
 // -10000 <= A[i] <= 10000
 // 2 <= K <= 10000
+// Seen this question in a real interview before?
+// Difficulty:Medium
 
 
 class Solution {
