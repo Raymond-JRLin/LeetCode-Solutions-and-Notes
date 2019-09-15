@@ -81,7 +81,7 @@ class Solution {
     }
 
     private int method1(int[] h) {
-        // brute force, kinda DP: 一个位置能装水， 把它自己视作 wall， 需要它左边或者右边有比它高的位置作为 wall， 所以我们可以去找 i 的左边最高和右边最高， 去他们的 min， 因为这两个位置是边界来 trap water。 同时我们只计算单位面积， 就是计算面积的时候高是两个位置的高度之差， 而长就是 1， 因为我们会去找每个位置， 所以只计算当前这一水平线的就好了， 下面淹没的水由它们之间更矮的 wall 去计算 => O(N) time and space
+        // brute force, kinda DP: 一个位置能装水， 把它自己视作 wall， 需要它左边或者右边有比它高的位置作为 wall， 所以我们可以去找 i 的左边最高和右边最高， 取他们的 min， 因为这两个位置是边界来 trap water。 同时我们只计算单位面积， 就是计算面积的时候高是两个位置的高度之差， 而长就是 1， 因为我们会去找每个位置， 所以只计算当前这一水平线的就好了， 下面淹没的水由它们之间更矮的 wall 去计算 => O(N) time and space
         int n = h.length;
         // get the maxLeft and maxRight for this index seperatedly
         // we should include height of current index, since then when we minus h[i] we get 0
