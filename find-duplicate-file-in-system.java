@@ -41,44 +41,105 @@
 
 class Solution {
     public List<List<String>> findDuplicate(String[] paths) {
-        List<List<String>> result = new ArrayList<>();
         if (paths == null || paths.length == 0) {
-            return result;
+            return Collections.emptyList();
         }
 
-//         my try: use HashMap to count every file
-        return my_try(paths);
+        return mytry(paths);
     }
-    private List<List<String>> my_try(String[] paths) {
-        Map<String, List<String>> map = new HashMap<>();
+
+    // follow-ups:
+    // 1. Imagine you are given a real file system, how will you search files? DFS or BFS ?
+    // In general, BFS will use more memory then DFS. However BFS can take advantage of the locality of files in inside directories, and therefore will probably be faster
+
+    // 2. If the file content is very large (GB level), how will you modify your solution?
+    // In a real life solution we will not hash the entire file content, since it's not practical. Instead we will first map all the files according to size. Files with different sizes are guaranteed to be different. We will than hash a small part of the files with equal sizes (using MD5 for example). Only if the md5 is the same, we will compare the files byte by byte
+
+    // 3. If you can only read the file by 1kb each time, how will you modify your solution?
+    // This won't change the solution. We can create the hash from the 1kb chunks, and then read the entire file if a full byte by byte comparison is required.
+
+    // What is the time complexity of your modified solution? What is the most time consuming part and memory consuming part of it? How to optimize?
+    // Time complexity is O(n^2 * k) since in worse case we might need to compare every file to all others. k is the file size
+
+    // How to make sure the duplicated files you find are not false positive?
+    // We will use several filters to compare: File size, Hash and byte by byte comparisons.
+
+    // Some more:
+    // 1. MD5 is definitely one way to hash a file, another more optimal alternative is to use SHA256. https://stackoverflow.com/questions/14139727/sha-256-or-md5-for-file-integrity
+
+    // 2. Also, to answer this What is the most time consuming part and memory consuming part of it? How to optimize? part:
+    // Comparing the file (by size, by hash and eventually byte by byte) is the most time consuming part.
+    // Generating hash for every file will be the most memory consuming part.
+    // We follow the above procedure will optimize it, since we compare files by size first, only when sizes differ, we'll generate and compare hashes, and only when hashes are the same, we'll compare byte by byte.
+    // Also, using better hashing algorithm will also reduce memory/time.
+    // https://stackoverflow.com/questions/2722943/is-calculating-an-md5-hash-less-cpu-intensive-than-sha-family-functions
+
+    private List<List<String>> mytry(String[] paths) {
+        Map<String, Set<String>> map = new HashMap<>(); // <content, Set<paths>>
         for (String path : paths) {
-            String[] inputs = path.split(" ");
-            // inputs: {dir, file(content), file(content), ...}
-            String dir = inputs[0];
-            for (int i = 1; i < inputs.length; i++) {
-                String[] contents = inputs[i].split("\\(");
-                // contents: {file, content)}
-                String name = contents[0];
-                String text = contents[1];
-                String dirName = dir + "/" + name;
-                if (map.containsKey(text)) {
-                    List<String> list = map.get(text);
-                    list.add(dirName);
-                    map.put(text, list);
-                } else {
-                    List<String> list = new ArrayList<>();
-                    list.add(dirName);
-                    map.put(text, list);
-                }
+            String[] strs = path.split(" ");
+            String dir = strs[0];
+            for (int i = 1; i < strs.length; i++) {
+                String s = strs[i];
+                int index = s.indexOf("(");
+                String name = s.substring(0, index);
+                String content = s.substring(index, s.length() - 1);
+                Set<String> set = map.getOrDefault(content, new HashSet<>());
+                set.add(dir + "/" + name);
+                map.put(content, set);
             }
         }
         List<List<String>> result = new ArrayList<>();
-        for (Map.Entry<String, List<String>> entry : map.entrySet()) {
-            List<String> list = entry.getValue();
-            if (list.size() > 1) {
-                result.add(list);
+        for (String key : map.keySet()) {
+            if (map.get(key).size() > 1) {
+                result.add(new ArrayList<>(map.get(key)));
             }
         }
         return result;
     }
 }
+
+
+// class Solution {
+//     public List<List<String>> findDuplicate(String[] paths) {
+//         List<List<String>> result = new ArrayList<>();
+//         if (paths == null || paths.length == 0) {
+//             return result;
+//         }
+//
+// //         my try: use HashMap to count every file
+//         return my_try(paths);
+//     }
+//     private List<List<String>> my_try(String[] paths) {
+//         Map<String, List<String>> map = new HashMap<>();
+//         for (String path : paths) {
+//             String[] inputs = path.split(" ");
+//             // inputs: {dir, file(content), file(content), ...}
+//             String dir = inputs[0];
+//             for (int i = 1; i < inputs.length; i++) {
+//                 String[] contents = inputs[i].split("\\(");
+//                 // contents: {file, content)}
+//                 String name = contents[0];
+//                 String text = contents[1];
+//                 String dirName = dir + "/" + name;
+//                 if (map.containsKey(text)) {
+//                     List<String> list = map.get(text);
+//                     list.add(dirName);
+//                     map.put(text, list);
+//                 } else {
+//                     List<String> list = new ArrayList<>();
+//                     list.add(dirName);
+//                     map.put(text, list);
+//                 }
+//             }
+//         }
+//         List<List<String>> result = new ArrayList<>();
+//         for (Map.Entry<String, List<String>> entry : map.entrySet()) {
+//             List<String> list = entry.getValue();
+//             if (list.size() > 1) {
+//                 result.add(list);
+//             }
+//         }
+//         return result;
+//     }
+// }
