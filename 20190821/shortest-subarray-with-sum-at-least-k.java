@@ -55,6 +55,7 @@ class Solution {
 
     private int method1(int[] nums, int k) {
         int n = nums.length;
+        // 先计算 prefix sum， sliding window 里可以用双指针和 sum 来直接得到， 这里没办法， 所以要先预处理一下
         int[] prefix = new int[n + 1];
         for (int i = 0; i < n; i++) {
             prefix[i + 1] = prefix[i] + nums[i];
@@ -65,7 +66,7 @@ class Solution {
             while (!dq.isEmpty() && prefix[i] - prefix[dq.peekFirst()] >= k) {
                 // 找到一个满足条件的 subarray
                 int start = dq.pollFirst();
-                result = Math.min(result, i - start);
+                result = Math.min(result, i - start); // 这里不加 1， 因为 prefix sum 的 index 已经加过了
             }
             while (!dq.isEmpty() && prefix[i] <= prefix[dq.peekLast()]) {
                 // 维持单调递增的 deque
