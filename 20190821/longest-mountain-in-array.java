@@ -49,7 +49,38 @@ class Solution {
 
         // return method1(A);
 
-        return method2(A);
+        // return method2(A);
+
+        return method3(A);
+    }
+
+    private int method3(int[] nums) {
+        // O(1) with variables on method2
+        int n = nums.length;
+        int up = 0; // 不断记录 i 左边最长的 uphill
+        int down = 0; // 不断记录 i 左边最长的 downhill
+        int result = 0;
+        for (int i = 1; i < n; i++) {
+            // 清零的情况是
+            // 1. 前后数相等
+            // 2. 重新遇到一个 uphill
+            // 在这里我们只看 down， up 可以一直累积， 哪怕现在是 downhill， up 也可以一直保持着
+            if (down > 0 && nums[i - 1] < nums[i] || nums[i] == nums[i - 1]) {
+                // down > 0 意味着已经是 downhill 了， 结果遇到开始上坡了， 说明之前的 mountain 结束了
+                up = 0;
+                down = 0;
+            }
+            if (nums[i - 1] < nums[i]) {
+                up++;
+            }
+            if (nums[i - 1] > nums[i]) {
+                down++;
+            }
+            if (up > 0 && down > 0) {
+                result = Math.max(result, up + down + 1);
+            }
+        }
+        return result;
     }
 
     private int method2(int[] nums) {
