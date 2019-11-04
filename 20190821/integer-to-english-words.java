@@ -38,9 +38,9 @@ class Solution {
     }
 
     String[] unit = new String[]{"", "Thousand", "Million", "Billion"};
-    String[] lessTen = new String[]{"", "One", "Two", "Three", "Four", "Five", "Six", "Seven", "Eight", "Nine"};
-    String[] lessTwenty = new String[]{"Ten", "Eleven", "Twelve", "Thirteen", "Fourteen", "Fifteen", "Sixteen", "Seventeen",
-                                          "Eighteen", "Nineteen"};
+    String[] lessTwenty = new String[]{"", "One", "Two", "Three", "Four", "Five", "Six", "Seven", "Eight", "Nine",
+                                    "Ten", "Eleven", "Twelve", "Thirteen", "Fourteen", "Fifteen", "Sixteen",
+                                    "Seventeen","Eighteen", "Nineteen"};
     String[] tens = new String[]{"", "", "Twenty", "Thirty", "Forty", "Fifty", "Sixty", "Seventy", "Eighty", "Ninety"};
 
     private String method1(int num) {
@@ -64,14 +64,12 @@ class Solution {
     private String getString(int num) {
         if (num == 0) {
             return "";
-        } else if (num < 10) {
-            return lessTen[num] + " ";
         } else if (num < 20) {
-            return lessTwenty[num % 10] + " ";
+            return lessTwenty[num] + " ";
         } else if (num < 100) {
             return tens[num / 10] + " " + getString(num % 10);
         } else {
-            return lessTen[num / 100] + " Hundred " + getString(num % 100);
+            return lessTwenty[num / 100] + " Hundred " + getString(num % 100);
         }
     }
 }
