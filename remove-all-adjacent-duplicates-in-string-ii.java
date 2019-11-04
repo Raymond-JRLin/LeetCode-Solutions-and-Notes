@@ -48,11 +48,38 @@ class Solution {
 
         // return mytry(s, k);
 
-        return method2(s, k);
+        // return method2(s, k);
+
+        return method3(s, k);
+    }
+
+    private String method3(String s, int k) {
+        // 1047 题一样的 2 pointers
+        int n = s.length();
+        char[] array = s.toCharArray();
+        int[] count = new int[n];
+        int j = 0;
+        for (int i = 0; i < n; i++) {
+            array[j] = array[i];
+            if (j > 0 && array[j - 1] == array[i]) {
+                count[j] = count[j - 1] + 1;
+            } else {
+                count[j] = 1;
+            }
+            if (count[j] == k) {
+                j -= k;
+            }
+            j++;
+        }
+        return new String(array, 0, j);
     }
 
     private String method2(String s, int k) {
         // iteration 那很明显就是用 Stack， 但是 contest 的时候只想到了 recursion
+        // 其实是 1047. Remove All Adjacent Duplicates In String 的 follow-up
+        // k 从 2 个变成了不确定的 k 个， 此时没办法用一个 stack 查 peek 是否一不一样
+        // 所以可以再有一个 stack， 放入放 char 的 stack 中 char 相对应的个数
+        // 然后就喝 1047 题是一样的了， 有 k 个的时候， 把 k 个全 pop 出来
         Stack<Character> chars = new Stack<>();
         Stack<Integer> count = new Stack<>();
         for (char c : s.toCharArray()) {
