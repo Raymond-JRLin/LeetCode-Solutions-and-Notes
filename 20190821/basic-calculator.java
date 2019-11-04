@@ -36,7 +36,39 @@ class Solution {
             return 0;
         }
 
-        return method1(s);
+        // return method1(s);
+
+        return method2(s);
+    }
+
+    private int method2(String s) {
+        int n = s.length();
+        int result = 0;
+        int sign = 1;
+        Stack<Integer> stack = new Stack<>();
+        for (int i = 0; i < n; i++) {
+            char c = s.charAt(i);
+            if (c == '+') {
+                sign = 1;
+            } else if (c == '-') {
+                sign = -1;
+            } else if (c == '(') {
+                stack.push(result);
+                stack.push(sign);
+                result = 0;
+                sign = 1;
+            } else if (c == ')') {
+                result = result * stack.pop() + stack.pop();
+            } else if (Character.isDigit(c)) {
+                int num = c - '0';
+                while (i + 1 < n && Character.isDigit(s.charAt(i + 1))) {
+                    num = num * 10 + (s.charAt(i + 1) - '0');
+                    i++;
+                }
+                result += num * sign;
+            }
+        }
+        return result;
     }
 
     private int method1(String s) {
