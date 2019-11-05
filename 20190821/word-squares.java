@@ -74,7 +74,9 @@ class Solution {
             return Collections.emptyList();
         }
 
-        return method1(words);
+        // return method1(words);
+
+        return method2(words);
     }
 
     // 422. Valid Word Square 是相似的
@@ -83,6 +85,78 @@ class Solution {
     // 实际上， 假设第一个是 ball， 根据定义， 下一个 row 肯定要以 a 开头
     // 所以这里需要预处理， 把每个 word 的 prefix 都找到
     // 可以用 map 或 Trie 来辅助
+
+    private List<List<String>> method2(String[] words) {
+        int n = words.length;
+        int len = words[0].length();
+        // use TrieNode and Trie to record prefix and words
+        Trie trie = new Trie(words);
+        List<List<String>> result = new ArrayList<>();
+        for (String word : words) {
+            List<String> list = new ArrayList<>();
+            list.add(word);
+            dfs2(word, trie, len, result, list, 1);
+        }
+        return result;
+    }
+    private void dfs2(String curr, Trie trie, int len, List<List<String>> result, List<String> list, int index) {
+        if (index == len) {
+            result.add(new ArrayList<>(list));
+            return;
+        }
+        StringBuilder sb = new StringBuilder();
+        for (String s : list) {
+            sb.append(s.charAt(index));
+        }
+        String prefix = sb.toString();
+        List<String> nexts = trie.getByPrefix(prefix);
+        if (nexts.isEmpty()) {
+            return;
+        }
+        for (String next : nexts) {
+            list.add(next);
+            dfs2(next, trie, len, result, list, index + 1);
+            list.remove(list.size() - 1);
+        }
+
+    }
+    class TrieNode {
+        TrieNode[] nodes;
+        List<String> strings;
+
+        TrieNode() {
+            nodes = new TrieNode[26];
+            strings = new ArrayList<>();
+        }
+    }
+    class Trie {
+        TrieNode root;
+
+        Trie(String[] words) {
+            this.root = new TrieNode();
+            for (String word : words) {
+                TrieNode head = root;
+                for (char c : word.toCharArray()) {
+                    if (head.nodes[c - 'a'] == null) {
+                        head.nodes[c - 'a'] = new TrieNode();
+                    }
+                    head.nodes[c - 'a'].strings.add(word);
+                    head = head.nodes[c - 'a'];
+                }
+            }
+        }
+
+        List<String> getByPrefix(String prefix) {
+            TrieNode head = root;
+            for (char c : prefix.toCharArray()) {
+                if (head.nodes[c - 'a'] == null) {
+                    return new ArrayList<>();
+                }
+                head = head.nodes[c - 'a'];
+            }
+            return new ArrayList<>(head.strings);
+        }
+    }
 
     private List<List<String>> method1(String[] words) {
         int n = words.length;
