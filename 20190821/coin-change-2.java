@@ -45,10 +45,13 @@
 class Solution {
     public int change(int amount, int[] coins) {
 
-        return mytry(amount, coins);
+
+        // return method1(amount, coins);
+
+        return method2(amount, coins);
     }
 
-    private int mytry(int amount, int[] coins) {
+    private int method2(int amount, int[] coins) {
         int n = coins.length;
         // no need to sort
         // definition
@@ -71,42 +74,32 @@ class Solution {
         return f[amount];
     }
 
-    /*
-    private int mytry0(int amount, int[] coins) {
+    private int method1(int amount, int[] coins) {
         int n = coins.length;
         Arrays.sort(coins);
-        int[] memo = new int[amount + 1]; // pruning
-        Arrays.fill(memo, -1);
-        dfs(amount, coins, 0, 0, memo);
-        for (int num : memo) {
-            System.out.print(num + " ");
+        int[][] memo = new int[n][amount + 1]; // pruning
+        for (int[] m : memo) {
+            Arrays.fill(m, -1);
         }
-        return memo[amount];
+        // 感觉就是 DP 的 recursion
+        return dfs(amount, coins, 0, memo);
     }
-    private int dfs(int amount, int[] coins, int index, int sum, int[] memo) {
-        System.out.println("check " + coins[index] + " at " + index +  " to get " + amount + ", sum = " + sum);
-        if (0 == amount) {
-            System.out.println("found ");
+    private int dfs(int amount, int[] coins, int index, int[][] memo) {
+        if (amount == 0) {
             return 1;
         }
         if (index >= coins.length) {
             return 0;
         }
-        if (0 > amount) {
-            System.out.println("exceed");
+        if (amount < 0) {
             return 0;
         }
-        if (memo[amount] != -1) {
-            System.out.println("already got # " + sum + " = " + memo[sum]);
-            return memo[amount];
+        if (memo[index][amount] != -1) {
+            return memo[index][amount];
         }
-        int count = 0;
-        for (int i = index; i < coins.length; i++) {
-            int curr = coins[i];
-            count += dfs(amount - curr, coins, i, sum + curr, memo);
-        }
-        System.out.println("count = " + count);
-        return memo[amount] = count;
+        // 取当前 coin 或者不取
+        int count = dfs(amount - coins[index], coins, index, memo) + dfs(amount, coins, index + 1, memo);
+        return memo[index][amount] = count;
     }
-    */
+
 }
