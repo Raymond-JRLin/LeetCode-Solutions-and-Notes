@@ -35,7 +35,27 @@ class Solution {
 
         // return method1(s);
 
-        return method2(s);
+        // return method2(s);
+
+        return method3(s);
+    }
+
+    private int method3(String s) {
+        int n = s.length();
+        int result = 1;
+        Set<Character> set = new HashSet<>();
+        int left = 0, right = 0;
+        while (right < n) {
+            while (!set.isEmpty() && set.contains(s.charAt(right))) {
+                // 一直删除左指针， 直到没有右指针重复的 char 为止
+                set.remove(s.charAt(left));
+                left++;
+            }
+            set.add(s.charAt(right));
+            result = Math.max(result, right - left + 1);
+            right++;
+        }
+        return result;
     }
 
     private int method2(String s) {
