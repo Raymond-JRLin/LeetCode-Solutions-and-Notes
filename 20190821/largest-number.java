@@ -30,6 +30,9 @@ class Solution {
 
     private String method1(int[] nums) {
         // turn int -> string to compare
+        // sort 是 O(NlogN), where N is the number of values in nums[]
+        // string.compareTo() is O(k), where k is the average length of string in arr[]
+        // total time complexity: O(NklogN), space complexity: O(N)
         int n = nums.length;
         String[] arr = new String[n];
         for (int i = 0; i < n; i++) {
