@@ -18,7 +18,7 @@
 //     Difficulty:Hard
 
 
-class Solution {
+class Solution {class Solution {
     public List<Integer> countSmaller(int[] nums) {
         if (nums == null || nums.length == 0) {
             return Collections.emptyList();
@@ -26,7 +26,73 @@ class Solution {
 
         // return method1(nums);
 
-        return method2(nums);
+        // return method2(nums);
+
+        return method3(nums);
+    }
+
+    private List<Integer> method3(int[] nums) {
+        // 另一种用自己建的带原 index 的 object， 这样就类似正常的 merge sort， 不要去记 index， 而是直接包含其中
+        int n = nums.length;
+
+        Item[] items = new Item[n];
+        for (int i = 0; i < n; i++) {
+            items[i] = new Item(nums[i], i);
+        }
+        int[] count = new int[n];
+        itemMergeSort(items, 0, n - 1, count);
+
+        List<Integer> result = new ArrayList<>();
+        for (int i = 0; i < n; i++) {
+            result.add(count[i]);
+        }
+        return result;
+    }
+    private void itemMergeSort(Item[] items, int start, int end, int[] count) {
+        if (start >= end) {
+            return;
+        }
+        int mid = start + (end - start) / 2;
+        itemMergeSort(items, start, mid, count);
+        itemMergeSort(items, mid + 1, end, count);
+        itemMerge(items, start, end, count);
+    }
+    private void itemMerge(Item[] items, int start, int end, int[] count) {
+        int mid = start + (end - start) / 2;
+        int left = start;
+        int right = mid + 1;
+        Item[] sorted = new Item[end + 1 - start];
+        int index = 0;
+        int smaller = 0;
+        while (left <= mid || right <= end) {
+            if (left <= mid && right <= end) {
+                if (items[left].val <= items[right].val) {
+                    count[items[left].index] += smaller;
+                    sorted[index++] = items[left++];
+                } else {
+                    smaller++;
+                    sorted[index++] = items[right++];
+                }
+            } else if (left <= mid) {
+                count[items[left].index] += smaller;
+                sorted[index++] = items[left++];
+            } else if (right <= end) {
+                smaller++;
+                sorted[index++] = items[right++];
+            }
+        }
+        for (int i = 0; i < sorted.length; i++) {
+            items[i + start] = sorted[i];
+        }
+    }
+    private class Item {
+        int val;
+        int index;
+
+        Item(int val, int index) {
+            this.val = val;
+            this.index = index;
+        }
     }
 
     private List<Integer> method2(int[] nums) {
