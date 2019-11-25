@@ -42,11 +42,11 @@ class Solution {
 
         // return mytry(nums);
 
-        return method1(nums);
+        // return method1(nums);
 
         // return method2(nums);
 
-        // return method3(nums);
+        return method3(nums);
     }
 
     private int method3(int[] nums) {
