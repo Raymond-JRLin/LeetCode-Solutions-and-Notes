@@ -27,6 +27,7 @@ public class Codec {
     // 这题和 serialize binary tree 不同的在于要求 The encoded string should be as compact as possible.
     // 每个 node 的 val 是不可少的， 所以考虑的应该是 null， 即如何不用额外一个 char 来代替 null
     // 那么就要用到 BST 的特性， 所以可以把 val 的上下限往下传， 来判断是 left child or right child
+    // 所以可以用 preorder
 
     // Encodes a tree to a single string.
     public String serialize(TreeNode root) {
@@ -52,6 +53,10 @@ public class Codec {
             return null;
         }
         String[] arr = data.split(",");
+        // 因为是 preorder, 所以不好用 i 来指向该放的数
+        // 把所有的放进 queue 里， 一个个往外拿
+        // 那这里就要用到 BST 的特性， 就是你怎么知道这个 poll 出来的应该是 left 还是 rigt， 所以要把 root 的 val 往下传
+        // 但是！ poll 出来的这个实际上就是要 construct 的 root， 因此往下传的应该是此子树的上下限
         Queue<Integer> queue = new LinkedList<>();
         for (String s : arr) {
             queue.offer(Integer.parseInt(s));
