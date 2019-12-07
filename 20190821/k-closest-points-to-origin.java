@@ -43,7 +43,46 @@ class Solution {
 
         // return mytry(points, K);
 
-        return method2(points, K);
+        // return method2(points, K);
+
+        return method3(points, K);
+    }
+
+    private int[][] method3(int[][] points, int k) {
+        quickSelect(points, k, 0, points.length - 1);
+        return Arrays.copyOf(points, k);
+    }
+    private void quickSelect(int[][] points, int k, int left, int right) {
+        if (left >= right) {
+            return;
+        }
+        int start = left;
+        int end = right;
+        int mid = start + (end - start) / 2;
+        int pivot = getDistanceSquare(points[mid]);
+        while (start <= end) {
+            while (getDistanceSquare(points[start]) < pivot) {
+                start++;
+            }
+            while (getDistanceSquare(points[end]) > pivot) {
+                end--;
+            }
+            if (start > end) {
+                break;
+            }
+            swap(points, start, end);
+            start++;
+            end--;
+        }
+        if (end - left + 1 >= k) {
+            quickSelect(points, k, left, end);
+        }
+        if (start - left + 1 <= k) {
+            quickSelect(points, k - (start - left), start, right);
+        }
+    }
+    private int getDistanceSquare(int[] p) {
+        return p[0] * p[0] + p[1] * p[1];
     }
 
     private int[][] method2(int[][] points, int k) {
