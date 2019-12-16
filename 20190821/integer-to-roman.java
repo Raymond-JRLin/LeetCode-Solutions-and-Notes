@@ -50,7 +50,29 @@ class Solution {
 
         // return method1(num);
 
-        return method2(num);
+        // return method2(num);
+
+        return method3(num);
+    }
+
+    private String method3(int num) {
+        // 如果不能用 / 和 %， 就只能用加减法了
+        // 把所有可能列出来， 然后按照法则一个个加上去
+        // 就是注意每个 4/9 的也要列出来
+        StringBuilder sb = new StringBuilder();
+
+        String[] roman = {"M", "CM", "D", "CD", "C", "XC", "L", "XL", "X", "IX", "V", "IV", "I"};
+        int[] values = {1000, 900, 500, 400, 100, 90, 50, 40, 10, 9, 5, 4, 1};
+
+        int i = 0;
+        while (num > 0 && i < values.length) {
+            while (num >= values[i]) {
+                num -= values[i];
+                sb.append(roman[i]);
+            }
+            i++;
+        }
+        return sb.toString();
     }
 
     private String method2(int num) {
