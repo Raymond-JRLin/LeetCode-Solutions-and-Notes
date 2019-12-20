@@ -19,7 +19,31 @@ class Solution {
             return 0;
         }
 
-        return method1(nums);
+        // return method1(nums);
+
+        return method2(nums);
+    }
+
+    private int method2(int[] nums) {
+        // 只朝一个方向走， 比如如果有 num - 1 那就不去查看， 直到最小的 value 被找到， 然后一路向上找 consecutive
+        int n = nums.length;
+        Set<Integer> set = new HashSet<>();
+        for (int num : nums) {
+            set.add(num);
+        }
+        int result = 0;
+        for (int num : nums) {
+            if (set.contains(num - 1)) {
+                continue;
+            }
+            int count = 1;
+            while (set.contains(num + 1)) {
+                count++;
+                num += 1;
+            }
+            result = Math.max(result, count);
+        }
+        return result;
     }
 
     private int method1(int[] nums) {
